@@ -1,0 +1,208 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   DESIGN SYSTEM (§7) — Tailwind v4 theme tokens
+   ============================================================ */
+@theme {
+  /* ----- Colors ----- */
+  --color-ink: #0a1c18;
+  --color-ink-soft: #0f2621;
+  --color-ink-800: #15312a;
+  --color-cream: #f7f1e8;
+  --color-cream-dim: #e9e0d2;
+  --color-gold: #f5761e;
+  --color-gold-deep: #e0541a;
+  --color-gold-soft: #ffb067;
+  --color-sage: #2e8b67;
+  --color-muted: #93a69f;
+  --color-brand: #e2470f;
+
+  /* ----- Fonts (next/font sets the *-src variables on <html>) ----- */
+  --font-display: var(--font-display-src), Georgia, serif;
+  --font-sans: var(--font-sans-src), system-ui, sans-serif;
+  --font-julius: var(--font-julius-src), system-ui, sans-serif;
+  --font-forum: var(--font-forum-src), sans-serif;
+
+  /* ----- Fluid display type scale ----- */
+  --text-display-xl: clamp(3rem, 7vw, 6rem);
+  --text-display-xl--line-height: 0.95;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-lg: clamp(2.5rem, 5vw, 4.25rem);
+  --text-display-lg--line-height: 1.02;
+  --text-display-lg--letter-spacing: -0.01em;
+  --text-display-md: clamp(2rem, 3.5vw, 3rem);
+  --text-display-md--line-height: 1.1;
+
+  /* ----- Spacing extensions ----- */
+  --spacing-section: 7rem;
+  --spacing-section-sm: 4.5rem;
+
+  /* ----- Radius ----- */
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  /* ----- Shadows ----- */
+  --shadow-card: 0 18px 40px -18px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 30px 60px -20px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 0 1px rgba(245, 118, 30, 0.25), 0 20px 50px -20px rgba(245, 118, 30, 0.35);
+
+  /* ----- Max-width containers ----- */
+  --container-content: 1200px;
+  --container-prose: 46ch;
+
+  /* ----- Animations ----- */
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-floaty: floaty 6s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.7s ease forwards;
+  --animate-spin-slow: spin 16s linear infinite;
+  --animate-confetti: confetti 1.3s ease-out forwards;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes confetti {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
+  15% { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.7); opacity: 0; }
+}
+
+/* Centered, padded content container (replaces v3 container config) */
+@utility container {
+  margin-inline: auto;
+  width: 100%;
+  padding-inline: 1.25rem;
+  @media (width >= 640px) { padding-inline: 1.5rem; max-width: 640px; }
+  @media (width >= 768px) { max-width: 768px; }
+  @media (width >= 1024px) { padding-inline: 2rem; max-width: 1024px; }
+  @media (width >= 1200px) { max-width: 1200px; }
+  @media (width >= 1280px) { max-width: 1280px; }
+}
+
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-ink text-muted font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Headings default to display serif + cream */
+  h1, h2, h3 {
+    @apply font-display text-cream;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  /* Accessible focus ring */
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* ---- Section rhythm ---- */
+  .section {
+    @apply py-section-sm md:py-section;
+  }
+
+  /* ---- Eyebrow label ---- */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-sans font-semibold uppercase tracking-[0.25em] text-gold;
+  }
+
+
+  /* ---- Rating stars row ---- */
+  .stars {
+    @apply inline-flex items-center gap-0.5 text-gold;
+  }
+}
+
+/* ---- Buttons (CTA system) — utilities so they compose with @apply ---- */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-pill px-7 py-3.5 text-sm font-semibold font-sans tracking-wide transition-all duration-300;
+}
+@utility btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-pill px-7 py-3.5 text-sm font-semibold font-sans tracking-wide transition-all duration-300 bg-gold text-white shadow-glow hover:bg-gold-deep hover:-translate-y-0.5;
+}
+@utility btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-pill px-7 py-3.5 text-sm font-semibold font-sans tracking-wide transition-all duration-300 border border-cream/25 text-cream hover:border-gold hover:text-gold;
+}
+@utility btn-dark {
+  @apply inline-flex items-center justify-center gap-2 rounded-pill px-7 py-3.5 text-sm font-semibold font-sans tracking-wide transition-all duration-300 bg-ink text-cream hover:bg-ink-800;
+}
+
+@layer utilities {
+  /* Decorative grain/vignette helper for dark hero */
+  .vignette {
+    background:
+      radial-gradient(120% 120% at 70% 10%, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+  }
+
+  /* Gradient overlay used over hero/menu imagery */
+  .overlay-bottom {
+    background: linear-gradient(180deg, transparent 30%, rgba(10, 28, 24, 0.92) 100%);
+  }
+  .overlay-left {
+    background: linear-gradient(90deg, rgba(10, 28, 24, 0.85) 0%, transparent 65%);
+  }
+
+  /* Hide scrollbar for horizontal scrollers */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* ---- Scroll reveal (§9) — toggled via IntersectionObserver ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+      opacity 0.8s var(--ease-out),
+      transform 0.8s var(--ease-out);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  /* staggered children */
+  .reveal[data-delay='1'] { transition-delay: 0.1s; }
+  .reveal[data-delay='2'] { transition-delay: 0.2s; }
+  .reveal[data-delay='3'] { transition-delay: 0.3s; }
+  .reveal[data-delay='4'] { transition-delay: 0.4s; }
+}
+
+/* Respect reduced motion (Animation Guide §9) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
