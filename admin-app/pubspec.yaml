@@ -1,0 +1,38 @@
+name: go4foodies_admin
+description: "Go4Foodie restaurant admin (Flutter Web on Firebase)."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  firebase_core: ^3.15.2
+  firebase_auth: ^5.7.0
+  cloud_firestore: ^5.6.12
+  http: ^1.4.0
+  http_parser: ^4.1.2
+  go_router: ^16.0.0
+  provider: ^6.1.5
+  google_fonts: ^6.2.1
+  fl_chart: ^1.0.0
+  qr_flutter: ^4.1.0
+  intl: ^0.20.2
+  shared_preferences: ^2.5.3
+  url_launcher: ^6.3.1
+  web: ^1.1.1
+  lucide_icons_flutter: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "go4foodies"
+  },
+  "targets": {
+    "go4foodies": {
+      "hosting": {
+        "admin": [
+          "go4foodies-admin"
+        ],
+        "api": [
+          "go4foodies"
+        ]
+      }
+    }
+  }
+}

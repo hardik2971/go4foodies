@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
 
-/// Default backend = the admin app (same API + DB as the web admin).
-/// Set it per build: flutter build appbundle --dart-define=API_BASE_URL=https://api.example.com
-/// Falls back to 10.0.2.2 = the host machine as seen from the Android emulator.
-const kDefaultBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'http://10.0.2.2:33664');
+/// Default backend = the Firebase `api` function behind Hosting (same /api/mobile/* contract as before).
+/// Override per build: flutter build appbundle --dart-define=API_BASE_URL=http://10.0.2.2:8787 (local run).
+const kDefaultBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'https://go4foodies.web.app');
 
 /// Public website origin — the payment page is loaded under it (gateways check the domain).
 /// Set it per build with --dart-define=SITE_ORIGIN=https://example.com

@@ -1,0 +1,35 @@
+{
+    "name": "Go4Foodie Admin",
+    "short_name": "Go4Foodie",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#f2f6f4",
+    "theme_color": "#e8640f",
+    "description": "Go4Foodie restaurant admin.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

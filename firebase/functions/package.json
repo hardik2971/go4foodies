@@ -1,0 +1,32 @@
+{
+  "name": "go4foodies-functions",
+  "private": true,
+  "main": "lib/index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions,firestore",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log",
+    "dev": "tsc && node --env-file-if-exists=.env.local lib/dev.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.4.0",
+    "firebase-functions": "^6.4.0",
+    "luxon": "^3.6.1",
+    "nodemailer": "^7.0.5",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.23",
+    "@types/luxon": "^3.6.2",
+    "@types/node": "^22.15.30",
+    "@types/nodemailer": "^6.4.17",
+    "typescript": "^5.8.3"
+  }
+}

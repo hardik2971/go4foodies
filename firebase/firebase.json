@@ -1,0 +1,129 @@
+{
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "runtime": "nodejs22",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "*.local",
+        "src",
+        "lib/dev.js*"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ],
+  "firestore": {
+    "database": "(default)",
+    "location": "asia-south1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "hosting": [
+    {
+      "target": "admin",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*"
+      ],
+      "predeploy": [
+        "node \"$PROJECT_DIR/scripts/copy-admin.js\""
+      ],
+      "rewrites": [
+        {
+          "source": "/api/**",
+          "function": {
+            "functionId": "api",
+            "region": "asia-south1"
+          }
+        },
+        {
+          "source": "/up",
+          "function": {
+            "functionId": "api",
+            "region": "asia-south1"
+          }
+        },
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(js|wasm|png|jpg|svg|otf|ttf|woff2)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=604800"
+            }
+          ]
+        },
+        {
+          "source": "/index.html",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "target": "api",
+      "public": "api-public",
+      "ignore": [
+        "firebase.json",
+        "**/.*"
+      ],
+      "rewrites": [
+        {
+          "source": "/api/**",
+          "function": {
+            "functionId": "api",
+            "region": "asia-south1"
+          }
+        },
+        {
+          "source": "/up",
+          "function": {
+            "functionId": "api",
+            "region": "asia-south1"
+          }
+        }
+      ],
+      "redirects": [
+        {
+          "source": "/",
+          "destination": "https://go4foodies-admin.web.app",
+          "type": 302
+        }
+      ]
+    }
+  ],
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "auth": {
+      "port": 9099
+    },
+    "hosting": {
+      "port": 5000
+    },
+    "ui": {
+      "enabled": true
+    }
+  }
+}

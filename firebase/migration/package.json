@@ -1,0 +1,12 @@
+{
+  "name": "go4foodies-migration",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dry-run": "node migrate.mjs --dry-run",
+    "migrate": "node migrate.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  }
+}

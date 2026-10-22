@@ -1,0 +1,22 @@
+rules_version = '2';
+
+// All business reads/writes go through the `api` Cloud Function (Admin SDK bypasses these rules).
+// Signed-in admin users (custom token, claim kind == 'user') may only LISTEN to the collections
+// that drive live screens (floor, POS, orders, reservations, notification badge).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.kind == 'user';
+    }
+
+    match /{coll}/{id} {
+      allow read: if isAdmin() && coll in ['tables', 'tableSessions', 'orders', 'payments', 'reservations', 'inventoryItems'];
+      allow write: if false;
+    }
+
+    // Password hashes and everything else: never readable by clients.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
