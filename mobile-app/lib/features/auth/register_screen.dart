@@ -95,6 +95,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.4, color: AppColors.ink))
                   : const Text('Create account'),
             ),
+            const SizedBox(height: 16),
+            const LegalLinks(prefix: 'By creating an account you agree to our'),
           ]),
         ),
       ),

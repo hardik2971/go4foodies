@@ -6,6 +6,7 @@ import { error, jsonBody, noStore, response, send, text, type ApiResult } from '
 import { placeOnlineOrder } from '../services/onlineOrder';
 import * as Reservations from '../services/reservations';
 import { purchase } from '../services/giftCards';
+import * as DeletionRequests from '../services/deletionRequests';
 import * as Razorpay from '../services/payments/razorpay';
 import * as Stripe from '../services/payments/stripe';
 import * as PayPal from '../services/payments/paypal';
@@ -140,6 +141,9 @@ r.post('/payment/capture', ctl(async (req) => {
 }));
 
 r.post('/gift-cards', ctl((req) => purchase(jsonBody(req))));
+
+// POST /api/account-deletion — website "Delete your account" request form.
+r.post('/account-deletion', ctl((req) => DeletionRequests.create(jsonBody(req))));
 
 // GET /api/uploads/:name — public, path-traversal safe.
 r.get('/uploads/:name', ctl(async (req, res) => {

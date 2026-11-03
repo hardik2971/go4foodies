@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Static export for Firebase Hosting (go4foodies-restaurant.web.app). Hosting rewrites
+  // /api/** to the `api` Cloud Function, so the browser calls the backend same-origin.
+  output: 'export',
   images: {
-    // Allow remote food photography (Unsplash) and serve modern formats.
-    formats: ['image/avif', 'image/webp'],
+    // No image optimisation server on static hosting; remote photos load directly.
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',

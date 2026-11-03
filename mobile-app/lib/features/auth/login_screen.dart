@@ -146,6 +146,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 style: TextStyle(color: c.muted, fontSize: 12.5),
               ),
             ],
+            const SizedBox(height: 12),
+            const LegalLinks(),
           ]),
         ),
       ),

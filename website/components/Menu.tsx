@@ -1,13 +1,16 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import MenuCard from './MenuCard';
 import Reveal from './Reveal';
-import { getLiveMenu } from '@/lib/menu-api';
+import { MENU_ITEMS } from '@/lib/content';
+import { useLiveMenu } from '@/lib/menu-api';
 
-export default async function Menu() {
-  // Show the first 6 items from the live admin menu (falls back to the static
-  // site menu if the admin is unreachable).
-  const { items } = await getLiveMenu();
+export default function Menu() {
+  // Show the first 6 items from the live admin menu (the static site menu is
+  // shown until it loads, and stays if the admin is unreachable).
+  const items = useLiveMenu()?.items ?? MENU_ITEMS;
   const featured = items.slice(0, 6);
 
   return (

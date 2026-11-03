@@ -381,6 +381,20 @@ r.post('/auth/password', me, authRoute(async (req) => {
   return { ok: true };
 }, { noStore: true }));
 
+const deleteMeSchema = z.object({ password: z.string().min(1, 'Enter your password to confirm') });
+
+/** DELETE /api/mobile/auth/me — Customer app "Delete account" (Google Play requirement). Staff
+ *  accounts are managed by the restaurant, so they are pointed at the /delete-account page instead. */
+r.delete('/auth/me', me, authRoute(async (req) => {
+  const user = req.principal!;
+  if (user.kind !== 'customer') throw new HttpError(403, 'Staff accounts are managed by the restaurant. Please contact your manager.');
+  const d = zparse(deleteMeSchema, jsonBody(req) ?? {});
+  const current = await passwordHash('customer', user.id);
+  if (!current || !check(d.password, current)) throw new HttpError(400, 'Password is incorrect');
+  await A.deleteOwnCustomerAccount(user.id, user.email);
+  return { ok: true };
+}, { noStore: true }));
+
 // ---------------------------------------------------------------- shared public flows
 
 const lower = (v: unknown) => (typeof v === 'string' ? v.toLowerCase() : v);

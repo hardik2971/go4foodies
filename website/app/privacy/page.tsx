@@ -1,6 +1,17 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+
+const SUPPORT_EMAIL = 'info@infidec.com';
+
+/** Contact e-mail, highlighted in the theme colour. */
+const Email = () => (
+  <a href={`mailto:${SUPPORT_EMAIL}`} className="font-semibold text-gold underline-offset-4 hover:underline">
+    {SUPPORT_EMAIL}
+  </a>
+);
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -8,7 +19,7 @@ export const metadata: Metadata = {
     'How Go4Foodie collects, uses, and protects your personal information.',
 };
 
-const SECTIONS: { heading: string; body: string[] }[] = [
+const SECTIONS: { heading: string; body: ReactNode[] }[] = [
   {
     heading: 'Introduction',
     body: [
@@ -53,6 +64,19 @@ const SECTIONS: { heading: string; body: string[] }[] = [
     ],
   },
   {
+    heading: 'Account Deletion',
+    body: [
+      <>
+        You can ask us to delete your Go4Foodie account — created on this website or in the Go4Foodie app — and the
+        personal data linked to it at any time. See{' '}
+        <Link href="/delete-account" className="font-semibold text-gold underline-offset-4 hover:underline">
+          Delete your account
+        </Link>{' '}
+        for how it works, or email <Email /> from the address on your account.
+      </>,
+    ],
+  },
+  {
     heading: 'Third-Party Links',
     body: [
       'Our site may link to third-party services (such as online ordering or social media). We are not responsible for the privacy practices of those services; please review their policies.',
@@ -67,7 +91,9 @@ const SECTIONS: { heading: string; body: string[] }[] = [
   {
     heading: 'Contact Us',
     body: [
-      'Questions about this policy? Email info@go4foodie.com or write to 245 Harbor View Avenue, Boston, MA 02127.',
+      <>
+        Questions about this policy? Email <Email /> or write to 245 Harbor View Avenue, Boston, MA 02127.
+      </>,
     ],
   },
 ];
@@ -86,7 +112,7 @@ export default function PrivacyPage() {
               Privacy Policy
             </h1>
             <p className="mt-4 text-xs uppercase tracking-[0.2em] text-cream/45">
-              Last updated · June 9, 2026
+              Last updated · October 28, 2026
             </p>
 
             <div className="mt-12 space-y-10">

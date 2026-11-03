@@ -147,6 +147,12 @@ class SessionController extends Notifier<SessionState> {
     updateProfile(res['user'] as Map<String, dynamic>);
   }
 
+  /// Customer app "Delete account": permanently deletes the account on the server, then signs out.
+  Future<void> deleteAccount(String password) async {
+    await _api.delete('/api/mobile/auth/me', {'password': password});
+    await signOut();
+  }
+
   Future<void> signOut() async {
     final role = state.role;
     await _clear();

@@ -23,8 +23,8 @@ const FIND_US = [
     ),
   },
   {
-    label: 'dinevo.help@gmail.com',
-    href: 'mailto:dinevo.help@gmail.com',
+    label: 'info@infidec.com',
+    href: 'mailto:info@infidec.com',
     icon: (
       <path
         fill="currentColor"

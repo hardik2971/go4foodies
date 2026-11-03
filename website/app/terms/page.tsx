@@ -72,7 +72,7 @@ const SECTIONS: { heading: string; body: string[] }[] = [
   {
     heading: 'Contact Us',
     body: [
-      'Questions about these terms? Email info@go4foodie.com or write to 245 Harbor View Avenue, Boston, MA 02127.',
+      'Questions about these terms? Email info@infidec.com or write to 245 Harbor View Avenue, Boston, MA 02127.',
     ],
   },
 ];

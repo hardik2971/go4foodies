@@ -107,6 +107,47 @@
           "type": 302
         }
       ]
+    },
+    {
+      "target": "web",
+      "public": "web-public",
+      "ignore": [
+        "firebase.json",
+        "**/.*"
+      ],
+      "predeploy": [
+        "node \"$PROJECT_DIR/scripts/copy-web.js\""
+      ],
+      "cleanUrls": true,
+      "rewrites": [
+        {
+          "source": "/api/**",
+          "function": {
+            "functionId": "api",
+            "region": "asia-south1"
+          }
+        }
+      ],
+      "headers": [
+        {
+          "source": "/_next/static/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            }
+          ]
+        },
+        {
+          "source": "**/*.@(html|txt)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        }
+      ]
     }
   ],
   "emulators": {

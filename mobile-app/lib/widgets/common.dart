@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../core/api.dart';
 import '../core/format.dart';
@@ -344,6 +345,36 @@ class KeyValue extends StatelessWidget {
           Text(value, style: TextStyle(fontWeight: bold ? FontWeight.w800 : FontWeight.w600, fontSize: bold ? 17 : 14, color: valueColor)),
         ]),
       );
+}
+
+/// Open a page of the public website (privacy, terms, delete-account) in an in-app browser tab.
+Future<void> openSitePage(BuildContext context, String path) async {
+  final ok = await launchUrl(Uri.parse('$kSiteOrigin$path'), mode: LaunchMode.inAppBrowserView);
+  if (!ok && context.mounted) toast(context, 'Could not open $kSiteOrigin$path', error: true);
+}
+
+/// "Privacy Policy · Terms" footer for the sign-in / sign-up screens.
+class LegalLinks extends StatelessWidget {
+  const LegalLinks({super.key, this.prefix});
+  final String? prefix;
+  @override
+  Widget build(BuildContext context) {
+    final style = TextStyle(color: context.c.muted, fontSize: 12.5);
+    Widget link(String label, String path, [Key? key]) => TextButton(
+          key: key,
+          style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 6), minimumSize: const Size(0, 32), textStyle: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700)),
+          onPressed: () => openSitePage(context, path),
+          child: Text(label),
+        );
+    return Column(children: [
+      if (prefix != null) Text(prefix!, textAlign: TextAlign.center, style: style),
+      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        link('Privacy Policy', '/privacy', const Key('login-privacy')),
+        Text('·', style: style),
+        link('Terms', '/terms'),
+      ]),
+    ]);
+  }
 }
 
 void toast(BuildContext context, String message, {bool error = false}) {

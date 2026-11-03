@@ -1,9 +1,0 @@
-{
-  "apphosting": [
-    {
-      "backendId": "go4foodies-web",
-      "rootDir": ".",
-      "ignore": ["node_modules", ".git", ".next", ".env", "firebase-debug.log"]
-    }
-  ]
-}

@@ -9,14 +9,14 @@ Everything runs in Firebase project **go4foodies** (region asia-south1). Nothing
 | Uploads | Cloud Storage `uploads/` | via `/api/upload`, served at `/api/uploads/:name` |
 | Admin panel | Firebase Hosting site `go4foodies-admin`: **https://go4foodies-admin.web.app** | `admin-app` (Flutter Web) |
 | API host | Firebase Hosting site `go4foodies`: **https://go4foodies.web.app** (`/api/**` → function; `/` → admin site) | `firebase/api-public` |
-| Public website | Firebase App Hosting backend `go4foodies-web` (asia-southeast1 — App Hosting has no Mumbai region): **https://go4foodies-web--go4foodies.asia-southeast1.hosted.app** | `website` (`firebase.json` + `apphosting.yaml`) |
+| Public website | Firebase Hosting site `go4foodies-restaurant` (target `web`): **https://go4foodies-restaurant.web.app** — static Next.js export; `/api/**` → `api` function. The old App Hosting backend `go4foodies-web` was deleted. | `website` (`output: 'export'` → `website/out`, copied by `firebase/scripts/copy-web.js`) |
 | Mobile app | Play Store / App Store | `mobile-app` (only the default API URL changed) |
 
 Redeploy:
 ```
 cd admin-app && flutter build web --release        # then:
+cd website && npx next build                      # static export -> website/out (run from PowerShell)
 cd firebase && FUNCTIONS_DISCOVERY_TIMEOUT=90 firebase deploy --only functions,hosting,firestore,storage
-cd website  && firebase deploy --only apphosting
 ```
 
 ## 1. One-time Google Cloud permissions (project owner, in the console)
@@ -49,7 +49,7 @@ firebase functions:secrets:set PAYPAL_CLIENT_SECRET
 Plain config — `firebase/functions/.env.go4foodies` (deployed with the function; no secrets in it):
 ```
 LOCAL_TZ=Asia/Kolkata
-WEBSITE_URL=https://themerchant.disolutions.net
+WEBSITE_URL=https://go4foodies-restaurant.web.app
 MAIL_HOST=…  MAIL_PORT=…  MAIL_SCHEME=…  MAIL_USERNAME=…  MAIL_FROM_ADDRESS=…
 RAZORPAY_KEY_ID=…  RAZORPAY_CURRENCY=…
 STRIPE_PUBLISHABLE_KEY=…  STRIPE_CURRENCY=…
@@ -60,8 +60,8 @@ A secret that has no value yet must still exist (set it to an empty string) or t
 ## 3. Deploy
 ```
 cd admin-app && flutter build web --release
+cd ../website && npx next build
 cd ../firebase && firebase deploy --only functions,hosting,firestore,storage
-cd ../website && firebase apphosting:backends:create --location asia-south1   # first time; connect the GitHub repo
 ```
 Smoke test: `https://go4foodies.web.app/up` → `ok`; sign in to the admin; `GET /api/menu`.
 
@@ -70,7 +70,7 @@ Smoke test: `https://go4foodies.web.app/up` → `ok`; sign in to the admin; `GET
 2. On the VPS: `mysqldump -u root -p restaurant_db > restaurant_db.sql`; copy to `secrets/`.
    Copy any files in the VPS `UPLOAD_DIR` to Storage `uploads/` (today all menu images are external URLs).
 3. `cd firebase/migration && node migrate.mjs --reset` (Firestore becomes an exact copy of the dump).
-4. Point the website (App Hosting) at the custom domain; update DNS.
+4. Connect the custom domain to the `go4foodies-restaurant` Hosting site; update DNS.
 5. Release the mobile app build (default API URL is now `https://go4foodies.web.app`).
 6. Watch `firebase functions:log` for a day, then shut down the VPS.
 

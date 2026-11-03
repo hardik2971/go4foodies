@@ -1,4 +1,4 @@
-package com.go4foodie.app
+package com.infidec.go4foodie
 
 import io.flutter.embedding.android.FlutterActivity
 

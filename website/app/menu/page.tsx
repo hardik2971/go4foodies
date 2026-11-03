@@ -1,17 +1,13 @@
 import type { Metadata } from 'next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import MenuExplorer from '@/components/MenuExplorer';
-import { getLiveMenu } from '@/lib/menu-api';
+import LiveMenuExplorer from '@/components/LiveMenuExplorer';
 
 export const metadata: Metadata = {
   title: 'Menu',
   description:
     'Explore the full menu at Go4Foodie — seasonal, wood-fired plates, house-made pasta, and curated wine.',
 };
-
-// Always render the freshest admin menu (QR scans must reflect live changes).
-export const dynamic = 'force-dynamic';
 
 function OrnamentPattern() {
   return (
@@ -35,8 +31,7 @@ function OrnamentPattern() {
   );
 }
 
-export default async function MenuPage() {
-  const { items, categories } = await getLiveMenu();
+export default function MenuPage() {
   return (
     <>
       <Header />
@@ -69,7 +64,7 @@ export default async function MenuPage() {
         </section>
 
         {/* Search, filters & dishes — live from the admin menu */}
-        <MenuExplorer items={items} categories={categories} />
+        <LiveMenuExplorer />
       </main>
       <Footer />
     </>

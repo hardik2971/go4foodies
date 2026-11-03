@@ -574,6 +574,30 @@ export async function deleteCustomer(id: string): Promise<void> {
   await ref(C.credentials, `customer_${id}`).delete();
 }
 
+/** Mobile "Delete account" (Play Store): the customer deletes themself. Unlinks and anonymises
+ *  past orders / bookings / gift cards / table sessions (kept for accounting), then removes the
+ *  customer row and its credentials. Matches by customerId and by the account e-mail. */
+export async function deleteOwnCustomerAccount(id: string, email: string): Promise<void> {
+  const ANON = 'Deleted customer';
+  const scrub: [Coll, string, Record<string, unknown>][] = [
+    [C.orders, 'customerEmail', { customerId: null, customerName: ANON, customerEmail: null, customerPhone: null }],
+    [C.reservations, 'email', { customerId: null, name: ANON, email: null, phone: null }],
+    [C.giftCards, 'customerEmail', { customerId: null, customerName: ANON, customerEmail: null }],
+    [C.tableSessions, '', { customerId: null, customerName: ANON }],
+  ];
+  const emails = [...new Set([email, email.toLowerCase()].filter(Boolean))];
+  for (const [coll, emailField, data] of scrub) {
+    const rows = new Map<string, Row>();
+    for (const r of await where(coll, 'customerId', id)) rows.set(r.id, r);
+    if (emailField && emails.length) for (const r of await where(coll, emailField, emails)) rows.set(r.id, r);
+    const w = db.bulkWriter();
+    for (const r of rows.values()) w.update(ref(coll, r.id), data);
+    await w.close();
+  }
+  await ref(C.customers, id).delete();
+  await ref(C.credentials, `customer_${id}`).delete();
+}
+
 // ---- Inventory ----
 
 export async function createInventoryItem(input: unknown): Promise<void> {

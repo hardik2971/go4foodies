@@ -6,7 +6,7 @@ const kDefaultBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'ht
 
 /// Public website origin — the payment page is loaded under it (gateways check the domain).
 /// Set it per build with --dart-define=SITE_ORIGIN=https://example.com
-const kSiteOrigin = String.fromEnvironment('SITE_ORIGIN', defaultValue: 'https://themerchant.disolutions.net');
+const kSiteOrigin = String.fromEnvironment('SITE_ORIGIN', defaultValue: 'https://go4foodies-restaurant.web.app');
 
 class ApiException implements Exception {
   ApiException(this.message, [this.status]);
@@ -40,7 +40,7 @@ class Api {
   Future<Map<String, dynamic>> post(String path, [Object? body]) => _send('POST', path, body: body ?? const {});
   Future<Map<String, dynamic>> put(String path, [Object? body]) => _send('PUT', path, body: body ?? const {});
   Future<Map<String, dynamic>> patch(String path, [Object? body]) => _send('PATCH', path, body: body ?? const {});
-  Future<Map<String, dynamic>> delete(String path) => _send('DELETE', path);
+  Future<Map<String, dynamic>> delete(String path, [Object? body]) => _send('DELETE', path, body: body);
 
   Future<Map<String, dynamic>> upload(String path, String filePath) async {
     final form = FormData.fromMap({'file': await MultipartFile.fromFile(filePath)});

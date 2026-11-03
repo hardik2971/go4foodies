@@ -114,6 +114,7 @@ export default function Footer({ showGallery = true }: { showGallery?: boolean }
           <div className="flex gap-6">
             <a href="/privacy" className="transition-colors hover:text-gold">Privacy</a>
             <a href="/terms" className="transition-colors hover:text-gold">Terms</a>
+            <a href="/delete-account" className="transition-colors hover:text-gold">Delete account</a>
           </div>
         </div>
       </div>

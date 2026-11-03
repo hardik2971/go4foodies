@@ -131,10 +131,10 @@ export default function Visit() {
           <div className="mt-5 font-semibold text-ink">
             <p>617 · 482 · 6060</p>
           </div>
-          <p className="mt-3 text-sm text-ink">info@go4foodie.com</p>
+          <p className="mt-3 text-sm text-ink">info@infidec.com</p>
           <div className="mt-4 flex items-center gap-4 text-gold">
             <a
-              href="mailto:info@go4foodie.com"
+              href="mailto:info@infidec.com"
               aria-label="Email"
               className="transition-colors hover:text-gold-deep"
             >

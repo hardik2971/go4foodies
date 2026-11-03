@@ -68,6 +68,18 @@ class ProfileScreen extends ConsumerWidget {
           ),
           _Tile(icon: Icons.dns_outlined, title: 'Server address', onTap: () => showServerSettings(context, ref)),
         ]),
+        const SectionTitle('Privacy & legal', padding: EdgeInsets.fromLTRB(4, 22, 4, 10)),
+        _Group(children: [
+          _Tile(key: const Key('privacy-policy'), icon: Icons.privacy_tip_outlined, title: 'Privacy Policy', onTap: () => openSitePage(context, '/privacy')),
+          _Tile(icon: Icons.description_outlined, title: 'Terms of Service', onTap: () => openSitePage(context, '/terms')),
+          _Tile(
+            key: const Key('delete-account'),
+            icon: Icons.delete_forever_outlined,
+            title: 'Delete account',
+            danger: true,
+            onTap: () => p.kind == 'customer' ? _deleteAccount(context, ref) : openSitePage(context, '/delete-account'),
+          ),
+        ]),
         const SizedBox(height: 24),
         OutlinedButton.icon(
           key: const Key('sign-out'),
@@ -149,6 +161,59 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
+  Future<void> _deleteAccount(BuildContext context, WidgetRef ref) async {
+    final password = TextEditingController();
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) {
+        final c = ctx.c;
+        return Padding(
+          padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.of(ctx).viewInsets.bottom + 24),
+          child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Text('Delete account', style: display(ctx, size: 22)),
+            const SizedBox(height: 12),
+            Text(
+              'This permanently deletes your Go4Foodie account, your sign-in details, name, phone number and address. '
+              'Past orders, bookings and gift cards are kept for accounting with your personal details removed. This cannot be undone.',
+              style: TextStyle(color: c.muted, height: 1.4),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                onPressed: () => openSitePage(ctx, '/delete-account'),
+                child: const Text('What gets deleted?'),
+              ),
+            ),
+            TextField(
+              key: const Key('delete-password'),
+              controller: password,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password (to confirm)'),
+            ),
+            const SizedBox(height: 20),
+            FilledButton(
+              key: const Key('delete-confirm'),
+              style: FilledButton.styleFrom(backgroundColor: c.danger, foregroundColor: Colors.white),
+              onPressed: () async {
+                if (!await confirm(ctx,
+                    title: 'Delete your account?', message: 'This cannot be undone.', confirmLabel: 'Delete', destructive: true)) {
+                  return;
+                }
+                if (!ctx.mounted) return;
+                final ok = await guard(ctx, () => ref.read(sessionProvider.notifier).deleteAccount(password.text));
+                if (ok && ctx.mounted) Navigator.pop(ctx);
+                if (ok && context.mounted) toast(context, 'Your account has been deleted');
+              },
+              child: const Text('Delete my account'),
+            ),
+          ]),
+        );
+      },
+    );
+  }
+
 class _DutySelector extends ConsumerWidget {
   const _DutySelector({required this.current});
   final String current;
@@ -182,14 +247,15 @@ class _Group extends StatelessWidget {
 }
 
 class _Tile extends StatelessWidget {
-  const _Tile({required this.icon, required this.title, required this.onTap});
+  const _Tile({super.key, required this.icon, required this.title, required this.onTap, this.danger = false});
   final IconData icon;
   final String title;
   final VoidCallback onTap;
+  final bool danger;
   @override
   Widget build(BuildContext context) => ListTile(
-        leading: Icon(icon, color: context.c.accent),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+        leading: Icon(icon, color: danger ? context.c.danger : context.c.accent),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.w600, color: danger ? context.c.danger : null)),
         trailing: Icon(Icons.chevron_right_rounded, color: context.c.muted),
         onTap: onTap,
       );

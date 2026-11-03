@@ -10,6 +10,9 @@
         ],
         "api": [
           "go4foodies"
+        ],
+        "web": [
+          "go4foodies-restaurant"
         ]
       }
     }

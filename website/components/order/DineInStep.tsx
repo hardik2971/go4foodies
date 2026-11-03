@@ -41,7 +41,7 @@ export default function DineInStep({
     let cancelled = false;
     setLoading(true);
     setError('');
-    fetch(`/api/availability?date=${date}`)
+    fetch(`/api/reservations/availability?date=${date}`)
       .then((r) => r.json())
       .then((data) => {
         if (cancelled) return;

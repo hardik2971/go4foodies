@@ -29,7 +29,7 @@ No source files were modified.
 | Navigation | `go_router` ^17.5.0 for top level (`/`, `/welcome`, `/onboarding/:role`, `/login/:role`, `/register`, `/c`, `/r`, `/o`); everything inside a shell uses `Navigator.push(MaterialPageRoute)` + IndexedStack tabs. |
 | HTTP client | `dio` ^5.11.1 wrapped by `core/api.dart` `Api` (JSON, `validateStatus: (_) => true`, connect 12 s / receive 25 s). Every call returns `Map<String,dynamic>`; non-2xx throws `ApiException(message = body.error ?? 'Request failed (status)', status)`. 401 while a token is set → `onUnauthorized` → `SessionController.signOut()`. |
 | Base URL | `--dart-define=API_BASE_URL` (default `http://10.0.2.2:33664`), overridable at runtime through the "Server settings" sheet (saved to SharedPreferences `baseUrl`). All paths are absolute (`/api/mobile/...`, `/api/menu`, ...). |
-| Website origin | `--dart-define=SITE_ORIGIN` (default `https://themerchant.disolutions.net`) — only used as `baseUrl` for the payment WebView HTML (gateways check the domain). |
+| Website origin | `--dart-define=SITE_ORIGIN` (default `https://go4foodies-restaurant.web.app`) — only used as `baseUrl` for the payment WebView HTML (gateways check the domain). |
 | Token storage | `flutter_secure_storage` keys `token` (JWT), `role` (AppRole name), `profile` (JSON of `user`). SharedPreferences: `baseUrl`, `themeMode`, `lastRole`, `onboarded_<role>`. |
 | Session restore | Splash → `SessionController.restore()` → `GET /api/mobile/auth/me`; 401 clears token; network error keeps cached profile. |
 | Image loading | `cached_network_image` via `widgets/common.dart` `NetImage`, URLs passed through `Api.image()`: relative `/x` → `baseUrl + /x`; `localhost`/`127.0.0.1` host rewritten to the configured server. Menu/category/trending images come from `MenuItem.imageUrl` (DB). App never uploads (`Api.upload()` exists but is unused; menu form takes an *Image URL* text field). |
@@ -39,8 +39,8 @@ No source files were modified.
 | Polling (no realtime today) | Floor plan every **8 s** (`floor_screen.dart`), staff orders board every **10 s** (`orders_board_screen.dart`), customer order detail every **10 s** until COMPLETED/CANCELED (`orders_screen.dart`), owner dashboard every **30 s** (`dashboard_screen.dart`). The web admin uses SSE `/api/floor-stream`; the app does not. |
 | Push notifications | **None.** No `firebase_messaging`, no FCM/APNs config, no notification permission in manifest/plist. (FCM would be new functionality.) |
 | Other packages | `shared_preferences`, `google_fonts`, `intl`, `smooth_page_indicator`, `flutter_native_splash`, `cupertino_icons`; dev: `flutter_lints`, `flutter_launcher_icons`. |
-| Android | `namespace`/`applicationId` **`com.go4foodie.app`**; AGP 8.11.1, Kotlin 2.2.20, Java 17; permissions INTERNET, CAMERA; `usesCleartextTraffic="true"`. Release signing via `android/key.properties`. |
-| iOS | `PRODUCT_BUNDLE_IDENTIFIER` **`com.go4foodie.app`** (RunnerTests: `com.go4foodie.app.RunnerTests`); deployment target 13.0; display name "Go4Foodie". **Info.plist has no `NSCameraUsageDescription`** (mobile_scanner will crash on iOS — pre-existing bug). |
+| Android | `namespace`/`applicationId` **`com.infidec.go4foodie`**; AGP 8.11.1, Kotlin 2.2.20, Java 17; permissions INTERNET, CAMERA; `usesCleartextTraffic="true"`. Release signing via `android/key.properties`. |
+| iOS | `PRODUCT_BUNDLE_IDENTIFIER` **`com.infidec.go4foodie`** (RunnerTests: `com.infidec.go4foodie.RunnerTests`); deployment target 13.0; display name "Go4Foodie". **Info.plist has no `NSCameraUsageDescription`** (mobile_scanner will crash on iOS — pre-existing bug). |
 | Tests | `test/widget_test.dart` imports `core/api.dart` and tests cart, slots, order/reservation status flows (pure logic). |
 
 ### 1.1 Screens per role
@@ -601,8 +601,8 @@ Optional new FCM topics/tokens (not in the current app): new order / reservation
 
 | Platform | Identifier | Notes |
 |---|---|---|
-| Android | `com.go4foodie.app` | Single app for all three roles (no flavors). Add SHA-1/SHA-256 of the debug key and the Play upload key (`android/key.properties`) and the Play App Signing key. |
-| iOS | `com.go4foodie.app` | Single bundle. `com.go4foodie.app.RunnerTests` needs no registration. APNs auth key required if FCM is added. |
+| Android | `com.infidec.go4foodie` | Single app for all three roles (no flavors). Add SHA-1/SHA-256 of the debug key and the Play upload key (`android/key.properties`) and the Play App Signing key. |
+| iOS | `com.infidec.go4foodie` | Single bundle. `com.infidec.go4foodie.RunnerTests` needs no registration. APNs auth key required if FCM is added. |
 | (Web, outside this app) | — | The public website (`website/`) uses `/api/menu`, `/api/orders`, `/api/payment`, `/api/reservations`, `/api/gift-cards`, `/api/tables/{code}` and the table QR URL `<WEBSITE_URL>/order?table=<code>`; it will need its own Web app registration if it moves to Firebase too. |
 
 No Firebase config files exist in the repo today.
